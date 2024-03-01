@@ -1,5 +1,7 @@
 const mongoose= require('mongoose');
 const bcrypt= require("bcrypt");
+const jwt= require("jsonwebtoken");
+
 const userSchema= new mongoose.Schema({
     name:{
         type: String,
@@ -14,11 +16,6 @@ const userSchema= new mongoose.Schema({
         type:String ,
         required: [true, "Email is required"],
         unique: true,
-        validate( value ) {
-            if( !validator.isEmail( value )) {
-                 throw new Error("Email is invalid")
-                  }
-             }
     },
     password:{
         type: String,
@@ -27,6 +24,11 @@ const userSchema= new mongoose.Schema({
     },
     address:{
         type: String,
+    },
+    role:{
+        type: String,
+        enum:['user', 'admin'],
+        default: 'user'
     },
     refreshToken:{
         type: String

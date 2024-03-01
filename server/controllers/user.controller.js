@@ -18,8 +18,8 @@ const options= {
 const generateAccessAndRefreshTokens= async(userId) =>{
     try{
         const user= await User.findById(userId);
-        const accessToken= user.generateAccessToken();
-        const refreshToken= user.generateRefreshToken();
+        const accessToken= await user.generateAccessToken();
+        const refreshToken= await user.generateRefreshToken();
 
         user.refreshToken= refreshToken;
         await user.save({ validateBeforeSave: false });
@@ -38,7 +38,7 @@ module.exports.signup= asyncHandler(async (req, res) =>{
     const {name, phone, email, password, address} =req.body
 
     if(
-        [name, phone, email, password].some((field) => field?.trim()==="")
+        [name, phone, email, password].some((field) => field==="")
     ){
         throw new ApiError(400, "All fields are Compulsory")
     }
@@ -121,4 +121,119 @@ module.exports.login= asyncHandler(async (req, res)=>{
             "User Logged in Successfully"
         )
     )
+})
+
+module.exports.changePassword= asyncHandler(async(req, res)=>{
+    const {oldPassword, newPassword}= req.body;
+    const user= await User.findById(req.user?._id);
+
+    const isPasswordCorrect= await user.isPasswordCorrect(oldPassword);
+
+    if(!isPasswordCorrect){
+        throw new ApiError(400, "Invalid Old Password");
+    }
+
+    user.password= newPassword;
+
+    await user.save({validateBeforeSave: false});
+
+    return res.status(200)
+    .json(new ApiResponse(200, {}, "Password Changed Successfully"))
+})
+
+module.exports.refreshAccessToken= asyncHandler(async (req, res)=>{
+    const incomingRefreshToken= req.cookies.refreshToken || req.body.refreshToken
+    console.log(incomingRefreshToken);
+    if(!incomingRefreshToken){
+        throw new ApiError(401, "Unauthorized request");
+    }
+
+    try {
+        const decodedToken= jwt.verify(incomingRefreshToken, process.env.REFRESH_TOKEN_SECRET);
+        
+        const user= await User.findById(decodedToken._id);
+        // console.log(user._id);
+        if(!user){
+            throw new ApiError(401, "Invalid Refresh Token");
+        }
+    
+        if(incomingRefreshToken !== user?.refreshToken){
+            throw new ApiError(401, "Refresh Token is expired or used")
+        }
+
+        const {accessToken, newRefreshToken}= await generateAccessAndRefreshTokens(user._id);
+    
+        res.status(200)
+        .cookie("accessToken", accessToken, options)
+        .cookie("refreshToken", newRefreshToken, options)
+        .json(
+            new ApiResponse(
+                200,
+                {accessToken, refreshToken: newRefreshToken},
+                "Access Token Refreshed"
+            )
+        )
+    } catch (error) {
+        throw new ApiError(401, error?.message || "Invalid Refresh Token")
+    }
+    
+})
+
+module.exports.logoutUser= asyncHandler(async (req, res)=>{
+    await User.findByIdAndUpdate(
+        req.user._id,
+        {
+            $set: {
+                refreshToken: undefined
+            }
+        },
+        {
+            new: true
+        }
+    )
+
+    return res
+    .status(200)
+    .clearCookie("accessToken", options)
+    .clearCookie("refreshToken", options)
+    .json(new ApiResponse(200, {}, "User Logged Out successfully"))
+    
+})
+
+module.exports.getUserDetails= asyncHandler(async (req, res)=>{
+    const user= req.user;
+    if(!user){
+        throw new ApiError(400,"Unauthorized Request");
+    }
+    const newUser= await User.findById(user._id).select("-password -refreshToken");
+
+    if(!newUser){
+        throw new ApiError(404,"User Not found");
+    }
+
+    return res.status(200).json(
+        new ApiResponse(200, {newUser}, "User Details Retrieved Successfully")
+    )
+})
+
+module.exports.updateAccountDetails= asyncHandler(async(req, res) => {
+    const {name, email, phone, address}= req.body;
+
+    if(!name || !email || !phone){
+        throw new ApiError(400, "All Fields are required");
+    }
+
+    const user= await User.findByIdAndUpdate(req.user?._id,
+        {
+            $set: {
+                name: name,
+                email: email,
+                address: address?address : "",
+                phone: phone
+            }
+        },
+        {new: true}).select("-password -refreshToken");
+
+        return res.status(200)
+        .json(new ApiResponse(200, user, "Account Details updated Successfully"));
 })
