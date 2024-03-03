@@ -3,6 +3,7 @@ const mongoose= require("mongoose");
 const {dbConnect}= require("./db/db.js");
 const cookieParser= require("cookie-parser");
 const UserRouter= require("./routes/user.routes.js");
+const ItemRouter= require("./routes/item.routes.js");
 require("dotenv").config();
 
 const app= express();
@@ -13,6 +14,8 @@ app.use(express.urlencoded({extended: true}));
 app.use(cookieParser());
 
 app.use("/users", UserRouter);
+
+app.use("/seller", ItemRouter );
 
 dbConnect().then(()=>{
     console.log("DB connected succesfully");
