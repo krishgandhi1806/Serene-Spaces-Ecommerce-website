@@ -19,11 +19,7 @@ const itemSchema= new mongoose.Schema({
         type: Number,
         required: true
     },
-    images:[
-        {
-            url: String
-        }
-    ]
+    images:[]
 });
 
 const Item= mongoose.model("Item", itemSchema);

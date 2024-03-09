@@ -1,10 +1,10 @@
 const mongoose= require("mongoose");
 
 const orderSchema= new mongoose.Schema({
-    owner: {
+    user: {
         type: mongoose.Schema.Types.ObjectId,
         ref: "User",
-        required: [true, "Owner is required"]
+        required: [true, "User is required"]
     },
     items:[
         {
