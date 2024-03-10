@@ -4,7 +4,7 @@ const orderSchema= new mongoose.Schema({
     user: {
         type: mongoose.Schema.Types.ObjectId,
         ref: "User",
-        required: [true, "User is required"]
+        required: [true, "User is required"] 
     },
     items:[
         {
@@ -19,7 +19,14 @@ const orderSchema= new mongoose.Schema({
     },
     paymentMethod:{
         type: String,
-        enum: ["COD", "Debit Card", "Credit Card"]
+    },
+    paymentStatus: {
+        type: Boolean,
+        default: false
+    },
+    razorpay_order_id:{
+        type: String,
+        required: [true, "RazorPay Order ID is required"],
     }
 }, {
     timestamps: true

@@ -1,4 +1,5 @@
 const { createCart, deleteIteminCart, deleteSingleQuantity } = require("../controllers/cart.controller");
+const { createOrder, verifyCapture } = require("../controllers/payment.controller");
 const { signup, login, logoutUser, refreshAccessToken, getUserDetails, changePassword, updateAccountDetails } = require("../controllers/user.controller");
 const { verifyJWT } = require("../middlewares/auth.middleware");
 const express= require("express");
@@ -23,4 +24,9 @@ router.route("/update").patch(updateAccountDetails);
 router.route("/cart/:itemid/:quantity").post(createCart);
 router.route("/cart/:itemid").delete(deleteIteminCart);
 router.route("/cart/:itemid").put(deleteSingleQuantity);
+
+// Placing Order
+router.route('/order').post(createOrder);
+router.route("/verify-capture").post(verifyCapture);
+
 module.exports= router
