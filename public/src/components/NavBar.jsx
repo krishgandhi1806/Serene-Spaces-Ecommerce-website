@@ -1,6 +1,8 @@
 import React, { useState } from 'react'
 import Logo from "../assets/Logo.png"
 import Hamburger from './Hamburger'
+import { Link } from 'react-router-dom';
+
 function NavBar() {
   
   const [hamburgerOpen, setHamburgerOpen]= useState(false);
@@ -23,8 +25,8 @@ function NavBar() {
             <NavlinksMobile/>
           </div>}
       </div>
-      <div className="flex gap-4 font-ubuntu pl-[53px] drop-shadow-lg bg-white top-[0rem] h-[7.2rem] absolute z-[-4] pt-[5.4rem] w-[100%]">
-              <div>Home</div>
+      <div className="flex gap-4 items-center justify-center font-ubuntu drop-shadow-lg bg-white top-[0rem] h-[7.2rem] absolute z-[-4] pt-[5.4rem] w-[100%]">
+              <div><Link to="/">Home</Link></div>
               <div>About</div>
               <div>Products</div>
               <div>Contact Us</div>
@@ -36,8 +38,9 @@ function NavBar() {
 function Navlinks(){
   return(
     <>
-    <button className="bg-[#D9D9D9] flex items-center justify-center pl-[28px] pr-[28px] pt-[5px] pb-[5px] text-[16px] rounded-[10px] font-PTserif text-[#956123]">LOG IN</button>
-            <button className="border-[#D9D9D9] flex items-center justify-center border-[.1rem] pl-[28px] pr-[28px] pt-[5px] pb-[5px] text-[16px] rounded-[10px] font-PTserif text-[#D9D9D9]">SIGN UP</button>
+    <button className="bg-[#D9D9D9] flex items-center justify-center pl-[28px] pr-[28px] pt-[5px] pb-[5px] text-[16px] rounded-[10px] font-PTserif text-[#956123]">
+      <Link to="/login">LOG IN</Link> </button>
+            <button className="border-[#D9D9D9] flex items-center justify-center border-[.1rem] pl-[28px] pr-[28px] pt-[5px] pb-[5px] text-[16px] rounded-[10px] font-PTserif text-[#D9D9D9]"><Link to="/login">SIGN UP</Link></button>
     </>
   )
 }

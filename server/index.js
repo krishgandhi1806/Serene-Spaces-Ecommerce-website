@@ -4,10 +4,12 @@ const {dbConnect}= require("./db/db.js");
 const cookieParser= require("cookie-parser");
 const UserRouter= require("./routes/user.routes.js");
 const ItemRouter= require("./routes/item.routes.js");
+const cors= require("cors");
 require("dotenv").config();
 
 const app= express();
 const PORT= process.env.PORT;
+app.use(cors());
 
 app.use(express.json());
 app.use(express.urlencoded({extended: true}));

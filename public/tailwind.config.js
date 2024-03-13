@@ -8,7 +8,8 @@ export default {
     extend: {
       fontFamily:{
         PTserif: ["PT Serif", "serif"],
-        ubuntu: ["Ubuntu", "sans-serif"]
+        ubuntu: ["Ubuntu", "sans-serif"],
+        monsterrat:["Montserrat", "sans-serif"]
       }
     },
   },
