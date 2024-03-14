@@ -40,7 +40,7 @@ function Navlinks(){
     <>
     <button className="bg-[#D9D9D9] flex items-center justify-center pl-[28px] pr-[28px] pt-[5px] pb-[5px] text-[16px] rounded-[10px] font-PTserif text-[#956123]">
       <Link to="/login">LOG IN</Link> </button>
-            <button className="border-[#D9D9D9] flex items-center justify-center border-[.1rem] pl-[28px] pr-[28px] pt-[5px] pb-[5px] text-[16px] rounded-[10px] font-PTserif text-[#D9D9D9]"><Link to="/login">SIGN UP</Link></button>
+            <button className="border-[#D9D9D9] flex items-center justify-center border-[.1rem] pl-[28px] pr-[28px] pt-[5px] pb-[5px] text-[16px] rounded-[10px] font-PTserif text-[#D9D9D9]"><Link to="/signup">SIGN UP</Link></button>
     </>
   )
 }
@@ -49,7 +49,7 @@ function NavlinksMobile(){
   return(
     <>
     <button className="bg-[#956123] flex items-center justify-center pl-[28px] pr-[28px] pt-[5px] pb-[5px] text-[16px] rounded-[10px] font-PTserif text-[#D9D9D9]"><Link to="/login">LOG IN</Link></button>
-            <button className="border-[#956123] flex items-center justify-center border-[.1rem] pl-[28px] pr-[28px] pt-[5px] pb-[5px] text-[16px] rounded-[10px] font-PTserif text-[#956123]"><Link to="/login">SIGN UP</Link></button>
+            <button className="border-[#956123] flex items-center justify-center border-[.1rem] pl-[28px] pr-[28px] pt-[5px] pb-[5px] text-[16px] rounded-[10px] font-PTserif text-[#956123]"><Link to="/signup">SIGN UP</Link></button>
     </>
   )
 }

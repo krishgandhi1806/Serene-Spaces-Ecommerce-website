@@ -2,6 +2,8 @@ import React, { useEffect, useState } from 'react'
 import { BASE_URL } from '../constants';
 import axios from 'axios';
 import { useNavigate } from 'react-router-dom';
+import toast from 'react-hot-toast';
+import validator from "email-validator";
 
 function Login() {
     const [email, setEmail]= useState("");
@@ -17,13 +19,26 @@ function Login() {
 
     const handleLogin= async (e)=>{
         e.preventDefault();
+        if(email===""){
+            return toast.error("Email is required!");
+        }
+        if(password===""){
+            return toast.error("Password is required!");
+        }
+        if(!validator.validate(email)){
+            return toast.error("Invalid Email!");
+        }
+
         await axios.post(`${BASE_URL}/users/login`, {
             email,  
             password    
         }).then((res)=> {
             localStorage.setItem("user", JSON.stringify(res.data.data));
+            toast.success("Successfully Logged In!");
             navigate("/");
-        }).catch((err)=> console.log(err))
+        }).catch((err)=> {
+            toast.error("Invalid Credentials!");
+        })
     }
 
   return (  

@@ -35,7 +35,9 @@ const generateAccessAndRefreshTokens= async(userId) =>{
 module.exports.signup= asyncHandler(async (req, res) =>{
     // Get user details from frontend
 
-    const {name, phone, email, password, address} =req.body
+    const {name, phone, email, password} =req.body
+    let address= req.body.address;
+    
 
     if(
         [name, phone, email, password].some((field) => field==="")
